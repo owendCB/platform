@@ -448,7 +448,9 @@ public:
 
     ~GenericBlockTimer() {
         hrtime_t spent(gethrtime() - start);
-        dest->add(spent / 1000);
+        if (dest != nullptr) {
+            dest->add(spent / 1000);
+        }
         log(spent, name, out);
     }
 
@@ -475,7 +477,7 @@ private:
 /* Convenience specialization which only records in a Histogram<hrtime_t>;
  * doesn't log slow blocks.
  */
-typedef GenericBlockTimer<Histogram<hrtime_t>, 0> BlockTimer;
+typedef GenericBlockTimer<Histogram<hrtime_t>, 10> BlockTimer;
 
 // How to print a bin.
 template<typename T>
